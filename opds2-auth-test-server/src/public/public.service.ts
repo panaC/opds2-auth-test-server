@@ -19,13 +19,18 @@ export class PublicService {
 
     public async publicFeed() {
 
-        const staticServerPublicUrl = resolve(STATIC_SERVER_URL, "/public");
+        console.log("publicFeedService");
+
+        const staticServerPublicUrl = resolve(STATIC_SERVER_URL, "/public/");
+        console.log("static server url", staticServerPublicUrl);
 
         const feed = new OPDSFeed();
 
         feed.Metadata = new OPDSMetadata();
         feed.Metadata.Title = "public feed";
 
+        console.log("get", staticServerPublicUrl);
+        
         const http = this.httpService.get(staticServerPublicUrl);
         const res = await http.toPromise();
         if (
@@ -33,26 +38,46 @@ export class PublicService {
             typeof res.data === "object" &&
             Array.isArray(res.data)
         ) {
+
+            console.log("get OK");
+            
             const data = res.data as IStaticServerModel[];
             const fileArray = data.filter((v) => typeof v.name === "string");
 
+            console.log("fileArray", fileArray);
+            
+
             const opdsPublicationArrayPromise = fileArray.map(async (file) => {
+                
+                const fileName = file.name;
+
+                console.log(">>", fileName);
 
                 const pub = new OPDSPublication();
 
-                const epubFileUrl = resolve(staticServerPublicUrl, file.name);
-                const epubFileUrlEncoded = Buffer.from(encodeURIComponent_RFC3986(epubFileUrl)).toString("base64");
+                const epubFileUrl = resolve(staticServerPublicUrl, fileName);
+                // const epubFileUrlEncoded = Buffer.from(encodeURIComponent_RFC3986(epubFileUrl).toString("base64");
+                // const epubFileUrlEncoded = encodeURIComponent_RFC3986(epubFileUrl);
+                const epubFileUrlEncoded = Buffer.from(epubFileUrl).toString("base64");
+                console.log(epubFileUrlEncoded);
                 const streamerFileUrl = resolve(STREAMER_SERVER_URL, epubFileUrlEncoded);
-                const streamerFileUrlManifest = resolve(streamerFileUrl, "manifest.json");
+                const streamerFileUrlManifest = streamerFileUrl + "/manifest.json"; // no resolve: ended with .epub
 
+                console.log(epubFileUrl, streamerFileUrl);
+
+                console.log("get ",streamerFileUrlManifest);
+                
                 const http = this.httpService.get(streamerFileUrlManifest);
                 const res = await http.toPromise();
                 if (
                     res.status === 200 &&
                     typeof res.data === "object"
                 ) {
+                    console.log("get ok");
+                    
 
                     const r2Publication = TaJsonDeserialize(res.data, Publication);
+                    
                     if (typeof r2Publication.Metadata === "object") {
                         pub.Metadata = r2Publication.Metadata;
                     }
@@ -69,6 +94,8 @@ export class PublicService {
                     pub.AddLink_(streamerFileUrlManifest, "application/webpub+json", "http://opds-spec.org/acquisition/open-access", "");
 
                     return pub;
+                } else {
+                    console.log("get ko", res.status, res.headers, typeof res.data);
                 }
 
                 return undefined;
@@ -79,14 +106,19 @@ export class PublicService {
                     return await p;
                 } catch (e) {
 
-                    debug(e);
+                    debug(e.toString());
                     return undefined;
                 }
             });
             const pubsNotFiltered = await Promise.all(pubsPromise);
             const pubs = pubsNotFiltered.filter((v) => !!v);
 
+            console.log("pubs loaded");
+
             feed.Publications = pubs;
+        } else {
+            console.log("get ko", res.status, res.headers);
+            
         }
 
         return TaJsonSerialize(feed);
