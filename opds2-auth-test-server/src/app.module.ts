@@ -8,11 +8,19 @@ import { UsersModule } from './users/users.module';
 import { LocalJwtController } from './local-jwt/local-jwt.controller';
 import { LocalController } from './local/local.controller';
 import { BasicController } from './basic/basic.controller';
+import { OauthPasswordController } from './oauth-password/oauth-password.controller';
 
 
 @Module({
   imports: [HttpModule, AuthModule, UsersModule],
-  controllers: [AppController, PublicController, LocalJwtController, LocalController, BasicController],
+  controllers: [
+    AppController,
+    PublicController,
+    LocalJwtController,
+    LocalController,
+    BasicController,
+    OauthPasswordController,
+  ],
   providers: [AppService, PubFeedService],
 })
 export class AppModule {}
