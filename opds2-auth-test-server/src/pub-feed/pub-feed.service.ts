@@ -5,7 +5,7 @@ import { OPDSFeed } from 'r2-opds-js/dist/es6-es2015/src/opds/opds2/opds2';
 import { OPDSMetadata } from 'r2-opds-js/dist/es6-es2015/src/opds/opds2/opds2-metadata';
 import { OPDSPublication } from 'r2-opds-js/dist/es6-es2015/src/opds/opds2/opds2-publication';
 import { Publication } from 'r2-shared-js/dist/es6-es2015/src';
-import { STATIC_SERVER_URL, STREAMER_SERVER_URL } from 'src/constants';
+import { STATIC_SERVER_URL, STATIC_SERVER_URL_IN_STREAMER, STREAMER_SERVER_URL } from 'src/constants';
 import { IStaticServerModel } from 'src/model/static.interface';
 import { resolve } from 'url';
 
@@ -18,6 +18,7 @@ export class PubFeedService {
     public async pubFeed(route: string = "public") {
 
         const staticServerPublicUrl = resolve(STATIC_SERVER_URL, "/public/");
+        const staticServerPublicUrlInStreamer = resolve(STATIC_SERVER_URL_IN_STREAMER, "/public/");
         console.log("static server url", staticServerPublicUrl);
 
         const feed = new OPDSFeed();
@@ -51,10 +52,11 @@ export class PubFeedService {
 
                 const pub = new OPDSPublication();
 
+                const epubFileUrlInStreamer = resolve(staticServerPublicUrlInStreamer, fileName);
                 const epubFileUrl = resolve(staticServerPublicUrl, fileName);
                 // const epubFileUrlEncoded = Buffer.from(encodeURIComponent_RFC3986(epubFileUrl).toString("base64");
                 // const epubFileUrlEncoded = encodeURIComponent_RFC3986(epubFileUrl);
-                const epubFileUrlEncoded = Buffer.from(epubFileUrl).toString("base64");
+                const epubFileUrlEncoded = Buffer.from(epubFileUrlInStreamer).toString("base64");
                 console.log(epubFileUrlEncoded);
                 const streamerFileUrl = resolve(STREAMER_SERVER_URL, epubFileUrlEncoded);
                 const streamerFileUrlManifest = streamerFileUrl + "/manifest.json"; // no resolve: ended with .epub
