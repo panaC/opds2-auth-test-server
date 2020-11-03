@@ -1,13 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
-import { PublicService } from './public.service';
+import { PubFeedService } from "src/pub-feed/pub-feed.service";
+
+import { Controller, Get } from "@nestjs/common";
 
 @Controller('public')
 export class PublicController {
-    constructor(private readonly publicService: PublicService) { }
+    constructor(private readonly pubFeedService: PubFeedService) { }
 
     @Get()
     entryPoint() {
-        return this.publicService.publicFeed();
+        return this.pubFeedService.pubFeed();
     }
 
 }

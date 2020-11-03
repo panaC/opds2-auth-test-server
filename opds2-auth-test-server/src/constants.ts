@@ -9,3 +9,7 @@ export const STATIC_SERVER_URL = env.STATIC_URL || "http://localhost:8080/";
 
 const _STREAMER_SERVER_URL = env.STREAMER_URL || "http://localhost:3000/";
 export const STREAMER_SERVER_URL = resolve(_STREAMER_SERVER_URL, "/pub/"); 
+
+export const jwtConstants = {
+    secret: 'secretKey',
+  };

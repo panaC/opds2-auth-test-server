@@ -1,4 +1,4 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { debug } from 'console';
 import { TaJsonDeserialize, TaJsonSerialize } from 'r2-lcp-js/dist/es6-es2015/src/serializable';
 import { OPDSFeed } from 'r2-opds-js/dist/es6-es2015/src/opds/opds2/opds2';
@@ -9,17 +9,13 @@ import { STATIC_SERVER_URL, STREAMER_SERVER_URL } from 'src/constants';
 import { IStaticServerModel } from 'src/model/static.interface';
 import { resolve } from 'url';
 
-const encodeURIComponent_RFC3986 = (str: string) =>
-    encodeURIComponent(str)
-        .replace(/[!'()*]/g, (c) => "%" + c.charCodeAt(0).toString(16));
-
 @Injectable()
-export class PublicService {
+export class PubFeedService {
     constructor(private httpService: HttpService) { }
 
-    public async publicFeed() {
+    private readonly logger = new Logger(PubFeedService.name);
 
-        console.log("publicFeedService");
+    public async pubFeed(route: string = "public") {
 
         const staticServerPublicUrl = resolve(STATIC_SERVER_URL, "/public/");
         console.log("static server url", staticServerPublicUrl);
@@ -27,7 +23,7 @@ export class PublicService {
         const feed = new OPDSFeed();
 
         feed.Metadata = new OPDSMetadata();
-        feed.Metadata.Title = "public feed";
+        feed.Metadata.Title = route + " feed";
 
         console.log("get", staticServerPublicUrl);
         
@@ -44,14 +40,14 @@ export class PublicService {
             const data = res.data as IStaticServerModel[];
             const fileArray = data.filter((v) => typeof v.name === "string");
 
-            console.log("fileArray", fileArray);
+            console.log("fileArray " + fileArray);
             
 
             const opdsPublicationArrayPromise = fileArray.map(async (file) => {
                 
                 const fileName = file.name;
 
-                console.log(">>", fileName);
+                console.log(">> " + fileName);
 
                 const pub = new OPDSPublication();
 
@@ -91,7 +87,7 @@ export class PublicService {
                     }
 
                     pub.AddLink_(epubFileUrl, "application/epub+zip", "http://opds-spec.org/acquisition/open-access", "");
-                    pub.AddLink_(streamerFileUrlManifest, "application/webpub+json", "http://opds-spec.org/acquisition/open-access", "");
+                    pub.AddLink_(streamerFileUrlManifest, "application/audiobook+json", "http://opds-spec.org/acquisition/open-access", "");
 
                     return pub;
                 } else {
