@@ -17,6 +17,9 @@ export class AppService {
     feed.Metadata.Title = NAME;
 
     feed.AddNavigation("public", resolveSelfUrl("/public"), "", "application/opds+json");
+    feed.AddNavigation("local auth", resolveSelfUrl("/local"), "", "application/opds+json");
+    feed.AddNavigation("local jwt", resolveSelfUrl("/localjwt"), "", "application/opds+json");
+    feed.AddNavigation("basic auth", resolveSelfUrl("/basic"), "", "application/opds+json");
 
     const feedSerialized = TaJsonSerialize(feed);
     return feedSerialized;

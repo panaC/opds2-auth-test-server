@@ -9,11 +9,11 @@ import {
 } from "r2-opds-js/dist/es6-es2015/src/opds/opds2/opds2-authentication-labels";
 import { OPDSLink } from "r2-opds-js/dist/es6-es2015/src/opds/opds2/opds2-link";
 
-export const localUnauthorizedDoc = (addJson: any = undefined) => {
+export const basicUnauthorizedDoc = (addJson: any = undefined) => {
     const opdsAuthDoc = new OPDSAuthenticationDoc;
 
     opdsAuthDoc.Id = "";
-    opdsAuthDoc.Title = "local auth";
+    opdsAuthDoc.Title = "basic auth";
 
     const logoLink = new OPDSLink();
     logoLink.Href = "https://www.edrlab.org/wp-content/uploads/2016/12/edrlab_logo@2x.jpg";
