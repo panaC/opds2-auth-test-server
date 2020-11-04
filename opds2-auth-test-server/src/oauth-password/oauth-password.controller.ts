@@ -21,6 +21,6 @@ export class OauthPasswordController {
     @UseGuards(PasswordAuthGuard)
     @Post()
     async login(@Request() req) {
-      return this.authService.login(req.user);
+        return this.authService.loginOAuth2(req.user);
     }
 }
