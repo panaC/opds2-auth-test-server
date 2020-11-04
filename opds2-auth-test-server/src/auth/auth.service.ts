@@ -48,8 +48,16 @@ export class AuthService {
 
     async validateRefreshToken(refreshToken: string) {
 
-        const [id] = Array.from(this.refreshTokenMap.entries()).find(([key, value]) => value === refreshToken);
+        if (!refreshToken) {
+            return undefined;
+        }
 
+        const res = Array.from(this.refreshTokenMap.entries()).find(([key, value]) => value === refreshToken);
+        if (!res) {
+            return undefined;
+        }
+
+        const [id] = res;
         const user = await this.usersService.findOneById(id);
         return user;
     }

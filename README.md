@@ -57,3 +57,11 @@ curl -i -X GET http://localhost:8282/local -H "Authorization: Bearer eyJhbGciOiJ
 ```
 curl -X GET http://localhost:8282/local -H "Authorization: Bearer ${TOKEN}" | jq
 ```
+
+```
+curl -i -X POST http://localhost:8282/password -d '{ "username": "admin", "password": "admin", "grant_type": "password"}' -H "Content-Type: application/json"
+```
+
+```
+curl -i -X POST http://localhost:8282/password -d '{ "refresh_token": "p80LiMxTywHp/frYX67sNFNWYxzfeCVIXIA7jGPta+KeHx5fyW9JgQRSqpsn7ZCs9gyjT0eJfpZhx3x+uw4dEQEYzf5b8irZUOaOIGJVO3ES8VyoI8POA1JgnqBNxOPPKjGwlB1m1pbtX6xx/9RFs0Gf7lDT1CUReALyNXpY7aqB1jz+UV+vQF8N8qteTK9O19ub9xRV3+4GYsWGdqwEuZ8QTj1LfSCahSU8pUGvf3IXFkeT4RzxTdcAJ7rbiLQwz522dR8beZozyWIPi6XjAa6l4rjsPkidpjd4kD9ThhlE5pR5rKAEu7WokVwDj7L8FJ+ntoOOIwSuY38/JAfFHg==", "grant_type": "refresh_token"}' -H "Content-Type: application/json"
+```

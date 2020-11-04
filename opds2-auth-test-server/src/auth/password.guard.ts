@@ -42,7 +42,7 @@ export class PasswordAuthGuard implements CanActivate {
             throw new UnauthorizedException(passwordUnauthorizedDoc());
         }
 
-        const grantType = req.body.grand_type;
+        const grantType = req.body.grant_type;
         switch (grantType) {
 
             case 'password': {
@@ -74,7 +74,9 @@ export class PasswordAuthGuard implements CanActivate {
             default: {
 
                 console.warn("wrong grant_type", grantType);
+                throw new UnauthorizedException(passwordUnauthorizedDoc({ err: "wrong grant_type" }));
                 
+                break;
             }
         }
 
