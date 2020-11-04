@@ -1,15 +1,16 @@
-import { HttpModule, Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PublicController } from './public/public.controller';
-import { PubFeedService } from './pub-feed/pub-feed.service';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { LocalJwtController } from './local-jwt/local-jwt.controller';
-import { LocalController } from './local/local.controller';
-import { BasicController } from './basic/basic.controller';
-import { OauthPasswordController } from './oauth-password/oauth-password.controller';
+import { HttpModule, Module } from "@nestjs/common";
 
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { AuthModule } from "./auth/auth.module";
+import { BasicController } from "./basic/basic.controller";
+import { LocalJwtController } from "./local-jwt/local-jwt.controller";
+import { LocalController } from "./local/local.controller";
+import { OauthImplicitController } from "./oauth-implicit/oauth-implicit.controller";
+import { OauthPasswordController } from "./oauth-password/oauth-password.controller";
+import { PubFeedService } from "./pub-feed/pub-feed.service";
+import { PublicController } from "./public/public.controller";
+import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [HttpModule, AuthModule, UsersModule],
@@ -20,6 +21,7 @@ import { OauthPasswordController } from './oauth-password/oauth-password.control
     LocalController,
     BasicController,
     OauthPasswordController,
+    OauthImplicitController,
   ],
   providers: [AppService, PubFeedService],
 })

@@ -21,7 +21,7 @@ export class AppService {
     feed.AddNavigation("local jwt", resolveSelfUrl("/localjwt"), "", "application/opds+json");
     feed.AddNavigation("basic auth", resolveSelfUrl("/basic"), "", "application/opds+json");
     feed.AddNavigation("OAUTH2 password", resolveSelfUrl("/password"), "", "application/opds+json");
-
+    feed.AddNavigation("OAUTH2 implicit", resolveSelfUrl("/implicit"), "", "application/opds+json");
 
     const feedSerialized = TaJsonSerialize(feed);
     return feedSerialized;
