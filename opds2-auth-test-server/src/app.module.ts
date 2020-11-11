@@ -4,6 +4,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { BasicController } from "./basic/basic.controller";
+import { CookieController } from "./cookie/cookie.controller";
 import { LocalJwtController } from "./local-jwt/local-jwt.controller";
 import { LocalController } from "./local/local.controller";
 import { OauthImplicitController } from "./oauth-implicit/oauth-implicit.controller";
@@ -22,6 +23,7 @@ import { UsersModule } from "./users/users.module";
     BasicController,
     OauthPasswordController,
     OauthImplicitController,
+    CookieController,
   ],
   providers: [AppService, PubFeedService],
 })

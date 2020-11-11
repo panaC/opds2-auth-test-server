@@ -8,6 +8,7 @@ import {
     OPDSAuthenticationLabels,
 } from "r2-opds-js/dist/es6-es2015/src/opds/opds2/opds2-authentication-labels";
 import { OPDSLink } from "r2-opds-js/dist/es6-es2015/src/opds/opds2/opds2-link";
+import { resolveSelfUrl } from "src/utils";
 
 export const localUnauthorizedDoc = (addJson: any = undefined) => {
     const opdsAuthDoc = new OPDSAuthenticationDoc;
@@ -28,6 +29,13 @@ export const localUnauthorizedDoc = (addJson: any = undefined) => {
     opdsAuth.Labels = new OPDSAuthenticationLabels();
     opdsAuth.Labels.Login = "LOGIN";
     opdsAuth.Labels.Password = "PASSWORD";
+
+    const authenticateLink = new OPDSLink();
+    authenticateLink.Rel = ["authenticate"];
+    authenticateLink.TypeLink = "application/json";
+    authenticateLink.Href = resolveSelfUrl("/local");
+
+    opdsAuth.Links = [authenticateLink];
 
     opdsAuthDoc.Authentication = [opdsAuth];
 

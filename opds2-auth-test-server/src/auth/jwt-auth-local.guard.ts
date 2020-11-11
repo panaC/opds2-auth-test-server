@@ -1,6 +1,7 @@
+import { localJwtUnauthorizedDoc } from "src/auth/opds/local-jwt-unauthorized";
+
 import { ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
-import { localUnauthorizedDoc } from "src/auth/opds/local-unauthorized";
 
 @Injectable()
 export class JwtAuthLocalGuard extends AuthGuard('jwt') {
@@ -16,7 +17,7 @@ export class JwtAuthLocalGuard extends AuthGuard('jwt') {
         // You can throw an exception based on either "info" or "err" arguments
         if (err || !user) {
 
-            throw new UnauthorizedException(localUnauthorizedDoc({ err, info }));
+            throw new UnauthorizedException(localJwtUnauthorizedDoc({ err, info }));
         }
         return user;
     }

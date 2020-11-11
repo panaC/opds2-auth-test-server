@@ -33,7 +33,7 @@ export class OauthImplicitController {
           }
         }
 
-        return { urlToSubmit: `${resolveSelfUrl("/auth")}?${query}`};
+        return { urlToSubmit: `${resolveSelfUrl("/implicit/login")}?${query}`};
     }
 
     @Post('login')
@@ -42,6 +42,8 @@ export class OauthImplicitController {
 
         // TODO implement query paramter 
         // custom redirect_uri
+
+        console.log("SUBMIT LOGIN");
 
         const user = await this.authService.validateUser(username, password);
         if (user) {
