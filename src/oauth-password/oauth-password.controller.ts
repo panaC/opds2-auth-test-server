@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
-import { JwtAuthPasswordGuard } from 'src/auth/jwt-auth-Password.guard';
+import { JwtAuthPasswordGuard } from 'src/auth/jwt-auth-password.guard';
 import { PasswordAuthGuard } from 'src/auth/password.guard';
 import { PubFeedService } from 'src/pub-feed/pub-feed.service';
 
