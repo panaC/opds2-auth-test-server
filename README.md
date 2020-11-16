@@ -1,6 +1,10 @@
 
 # opds2 authentification test server
 
+> automatic deployment on google cloud run
+
+## URL
+https://opds-auth-test-server-aplqpqv3wa-ey.a.run.app/
 
 - opds-server run on port 8282
 ```
