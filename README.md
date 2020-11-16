@@ -1,28 +1,6 @@
 
 # opds2 authentification test server
 
-## require 
-
-- docker-desktop for macOs
-
-
-## architecture
-
-- r2-streamer-js run on port 8181
-
-```
-cd streamer-server
-./run.sh
-
-```
-
-- epub-server run on port 8080
-```
-
-cd epub-server
-./run.sh
-```
-
 
 - opds-server run on port 8282
 ```

@@ -4,6 +4,7 @@ import { initGlobalConverters_GENERIC } from '@r2-shared-js/init-globals';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import * as cookieParser from 'cookie-parser';
+import { PORT } from './constants';
 
 initGlobalConverters_GENERIC();
 
@@ -14,6 +15,6 @@ async function bootstrap() {
   app.setViewEngine('ejs');
   app.use(cookieParser());
 
-  await app.listen(8282);
+  await app.listen(PORT);
 }
 bootstrap();
