@@ -20,6 +20,7 @@ export class AppService {
     feed.AddNavigation("local auth", resolveSelfUrl("/local"), "", "application/opds+json");
     feed.AddNavigation("local jwt", resolveSelfUrl("/localjwt"), "", "application/opds+json");
     feed.AddNavigation("basic auth", resolveSelfUrl("/basic"), "", "application/opds+json");
+    feed.AddNavigation("basic auth with header", resolveSelfUrl("/basicwithheader"), "", "application/opds+json");
     feed.AddNavigation("OAUTH2 password", resolveSelfUrl("/password"), "", "application/opds+json");
     feed.AddNavigation("OAUTH2 implicit (60s token and not refresh)", resolveSelfUrl("/implicit"), "", "application/opds+json");
     feed.AddNavigation("cookie", resolveSelfUrl("/cookie"), "", "application/opds+json");
