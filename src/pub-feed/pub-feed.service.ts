@@ -89,7 +89,7 @@ export class PubFeedService {
                     }
 
                     pub.AddLink_(epubFileUrl, "application/epub+zip", "http://opds-spec.org/acquisition/open-access", "");
-                    pub.AddLink_(streamerFileUrlManifest, "application/audiobook+json", "http://opds-spec.org/acquisition/open-access", "");
+                    pub.AddLink_(streamerFileUrlManifest, "application/webpub+json", "http://opds-spec.org/acquisition/open-access", "");
 
                     return pub;
                 } else {
