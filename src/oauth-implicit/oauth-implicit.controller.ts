@@ -4,9 +4,10 @@ import { PubFeedService } from "src/pub-feed/pub-feed.service";
 import { resolveSelfUrl } from "src/utils";
 
 import {
-    Controller, Get, Post, Render, Request, RequestMethod, Response, UnauthorizedException, UseGuards,
+    Controller, Get, Post, Render, Request, Response, UnauthorizedException, UseGuards,
 } from "@nestjs/common";
 import { JwtAuthImplicitGuard } from "src/auth/jwt-auth-implicit.guard";
+import { ok } from "assert";
 
 @Controller('implicit')
 export class OauthImplicitController {
@@ -26,24 +27,36 @@ export class OauthImplicitController {
     @Render('pages/login')
     loginGet(@Request() req) {
 
-        let query: string = '';
+        let query = '';
         for (const key in req.query) {
           if (req.query.hasOwnProperty(key)) {
-            query += `${key.toString()}=${req.query[key]}&`;
+            query += `${query ? '&' : '?'}${key.toString()}=${req.query[key]}`;
           }
         }
-
-        return { urlToSubmit: `${resolveSelfUrl("/implicit/login")}?${query}`};
+    
+        return { urlToSubmit: `${resolveSelfUrl("/implicit/login")}${query}`};
     }
 
     @Post('login')
     async loginPost(@Request() req, @Response() res) {
         const { username, password } = req.body;
 
-        // TODO implement query paramter 
-        // custom redirect_uri
+        const redirect_uri = req.query["redirect_uri"] || "opds://authorize";
+        delete req.query["redirect_uri"];
 
-        console.log("SUBMIT LOGIN");
+        try {
+            ok(!req.query["response_type"] || req.query["response_type"] === "token", "OAuth 2.0 implicit flow, the response type is always token");
+        } catch (e) {
+            throw new UnauthorizedException(implicitUnauthorizedDoc({error: e.toString()}));
+        }
+        delete req.query["response_type"];
+        
+        let query = '';
+        for (const key in req.query) {
+          if (req.query.hasOwnProperty(key)) {
+            query += `${query ? '&' : '?'}${key.toString()}=${req.query[key]}`;
+          }
+        }
 
         const user = await this.authService.validateUser(username, password);
         if (user) {
@@ -52,8 +65,11 @@ export class OauthImplicitController {
             
             const { access_token } = await this.authService.login(user);
 
-            const id = "";
-            res.redirect(`opds://authorize/?id=${id}&access_token=${access_token}&token_type=bearer`)
+            query += `${query ? '&' : '?'}id=${encodeURIComponent(resolveSelfUrl("/implicit"))}`;
+            query += `&access_token=${access_token}`;
+            query += `&token_type=bearer`;
+
+            res.redirect(`${redirect_uri}${query}`);
             return ;
         }
 
