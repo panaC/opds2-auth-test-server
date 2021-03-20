@@ -3,7 +3,7 @@ import { resolve } from "url";
 
 export const NAME = "OPDS2 authentification test server";
 
-export const PORT = env.PORT || 8080;
+export const PORT = env.PORT || 8282;
 
 export const SELF_SERVER_URL = env.SERVER_URL || "http://localhost:8282/";
 
