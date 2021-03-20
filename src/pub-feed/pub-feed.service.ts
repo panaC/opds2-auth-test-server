@@ -15,7 +15,7 @@ export class PubFeedService {
 
     private readonly logger = new Logger(PubFeedService.name);
 
-    public async pubFeed(route: string = "public") {
+    public async pubFeed(route = "public") {
 
         const staticServerPublicUrl = resolve(STATIC_SERVER_URL, "/public/");
         const staticServerPublicUrlInStreamer = resolve(STATIC_SERVER_URL_IN_STREAMER, "/public/");

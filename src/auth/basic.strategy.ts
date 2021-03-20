@@ -14,6 +14,7 @@ export class BasicStrategy extends PassportStrategy(BasicStrategyPassport) {
         });
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     authenticate(req: Request, options?: object) {
 
         return super.authenticate(req, options);
