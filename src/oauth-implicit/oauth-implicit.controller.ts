@@ -54,7 +54,7 @@ export class OauthImplicitController {
         let query = '';
         for (const key in req.query) {
           if (req.query.hasOwnProperty(key)) {
-            query += `${query ? '&' : '?'}${key.toString()}=${req.query[key]}`;
+            query += `${query ? '&' : '#'}${key.toString()}=${req.query[key]}`;
           }
         }
 
@@ -65,7 +65,7 @@ export class OauthImplicitController {
             
             const { access_token } = await this.authService.login(user);
 
-            query += `${query ? '&' : '?'}id=${encodeURIComponent(resolveSelfUrl("/implicit"))}`;
+            query += `${query ? '&' : '#'}id=${encodeURIComponent(resolveSelfUrl("/implicit"))}`;
             query += `&access_token=${access_token}`;
             query += `&token_type=bearer`;
 
