@@ -6,6 +6,14 @@
 ## URL
 https://opds-auth-test-server-aplqpqv3wa-ey.a.run.app/
 
+## localhost proxy
+
+`npm install -g localtunnel`
+
+`lt --port 8282 --subdomain opds2-auth-test-server`
+
+https://opds2-auth-test-server.loca.lt
+
 - opds-server run on port 8282
 ```
 cd opds2-auth-test-server
