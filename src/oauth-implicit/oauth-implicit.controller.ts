@@ -4,7 +4,7 @@ import { PubFeedService } from "src/pub-feed/pub-feed.service";
 import { resolveSelfUrl } from "src/utils";
 
 import {
-    Controller, Get, Post, Render, Request, Response, UnauthorizedException, UseGuards,
+    Param, Controller, Get, Post, Render, Request, Response, UnauthorizedException, UseGuards,
 } from "@nestjs/common";
 import { JwtAuthImplicitGuard } from "src/auth/jwt-auth-implicit.guard";
 import { ok } from "assert";
@@ -23,22 +23,15 @@ export class OauthImplicitController {
         return this.pubFeedService.pubFeed("password OAUTH2");
     }
 
-    @Get('login')
+    @Get('login/:id?')
     @Render('pages/login')
     loginGet(@Request() req) {
 
-        let query = '';
-        for (const key in req.query) {
-          if (req.query.hasOwnProperty(key)) {
-            query += `${query ? '&' : '?'}${key.toString()}=${req.query[key]}`;
-          }
-        }
-    
-        return { urlToSubmit: `${resolveSelfUrl("/implicit/login")}${query}`};
+        return { urlToSubmit: resolveSelfUrl(req.originalUrl) };
     }
 
-    @Post('login')
-    async loginPost(@Request() req, @Response() res) {
+    @Post('login/:id?')
+    async loginPost(@Request() req, @Response() res, @Param('id') id: string) {
         const { username, password } = req.body;
 
         const redirect_uri = req.query["redirect_uri"] || "opds://authorize";
@@ -50,11 +43,12 @@ export class OauthImplicitController {
             throw new UnauthorizedException(implicitUnauthorizedDoc({error: e.toString()}));
         }
         delete req.query["response_type"];
-        
+
+        const queryType = id === "google" ? "#" : "?";
         let query = '';
         for (const key in req.query) {
           if (req.query.hasOwnProperty(key)) {
-            query += `${query ? '&' : '?'}${key.toString()}=${req.query[key]}`;
+            query += `${query ? '&' : queryType}${key.toString()}=${req.query[key]}`;
           }
         }
 
@@ -65,7 +59,7 @@ export class OauthImplicitController {
             
             const { access_token } = await this.authService.login(user);
 
-            query += `${query ? '&' : '?'}id=${encodeURIComponent(resolveSelfUrl("/implicit"))}`;
+            query += `${query ? '&' : queryType}id=${encodeURIComponent(resolveSelfUrl("/implicit"))}`;
             query += `&access_token=${access_token}`;
             query += `&token_type=bearer`;
 
