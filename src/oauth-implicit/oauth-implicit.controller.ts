@@ -4,7 +4,7 @@ import { PubFeedService } from "src/pub-feed/pub-feed.service";
 import { resolveSelfUrl } from "src/utils";
 
 import {
-    Param, Controller, Get, Post, Render, Request, Response, UnauthorizedException, UseGuards,
+    Param, Controller, Get, Post, Render, Request, Response, UnauthorizedException, UseGuards, Query
 } from "@nestjs/common";
 import { JwtAuthImplicitGuard } from "src/auth/jwt-auth-implicit.guard";
 import { ok } from "assert";
@@ -25,9 +25,22 @@ export class OauthImplicitController {
 
     @Get('login/:id?')
     @Render('pages/login')
-    loginGet(@Request() req) {
+    loginGet(@Request() req, @Query('lang') lang: string) {
 
-        return { urlToSubmit: resolveSelfUrl(req.originalUrl) };
+        const i18n_fr = {
+          _home: "Connectez-vous",
+          _username: "nom d'utilisateur",
+          _password: "mot de passe",
+          _submit: "connexion",
+        };
+
+        let ret = {
+          urlToSubmit: resolveSelfUrl(req.originalUrl),
+        };
+        if (lang === "fr")
+          ret = { ...ret, ...i18n_fr };
+
+        return ret;
     }
 
     @Post('login/:id?')
