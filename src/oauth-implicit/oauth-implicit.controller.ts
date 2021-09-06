@@ -4,10 +4,11 @@ import { PubFeedService } from "src/pub-feed/pub-feed.service";
 import { resolveSelfUrl } from "src/utils";
 
 import {
-    Controller, Get, Post, Render, Request, Response, UnauthorizedException, UseGuards, Query,
+    Controller, Get, Post, Render, Req, Res, UnauthorizedException, UseGuards, Query,
 } from "@nestjs/common";
 import { JwtAuthImplicitGuard } from "src/auth/jwt-auth-implicit.guard";
 import { ok } from "assert";
+import { Request, Response } from "express";
 
 @Controller('implicit')
 export class OauthImplicitController {
@@ -25,7 +26,7 @@ export class OauthImplicitController {
 
     @Get('login')
     @Render('pages/login')
-    loginGet(@Request() req, @Query('lang') lang: string) {
+    loginGet(@Req() req, @Query('lang') lang: string) {
 
         const i18n_fr = {
           _home: "Connectez-vous",
@@ -44,11 +45,15 @@ export class OauthImplicitController {
     }
 
     @Post('login')
-    async loginPost(@Request() req, @Response() res) {
+    async loginPost(@Req() req: Request, @Res() res: Response) {
         const { username, password } = req.body;
 
         const redirect_uri = req.query["redirect_uri"] || "opds://authorize";
         delete req.query["redirect_uri"];
+
+        // https://datatracker.ietf.org/doc/html/rfc6749#section-1.7
+        const userAgent = req.headers["user-agent"];
+        if (userAgent) res.header["user-agent"] = userAgent;
 
         try {
             ok(!req.query["response_type"] || req.query["response_type"] === "token", "OAuth 2.0 implicit flow, the response type is always token");
@@ -60,6 +65,7 @@ export class OauthImplicitController {
         let query = '';
         for (const key in req.query) {
           if (req.query.hasOwnProperty(key)) {
+            // https://datatracker.ietf.org/doc/html/rfc6749#section-4.2.2
             query += `${query ? '&' : '#'}${key.toString()}=${req.query[key]}`;
           }
         }
